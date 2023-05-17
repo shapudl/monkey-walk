@@ -7,8 +7,9 @@ const map = [
 ];
 
 module.exports = map;
-// is it valid if a map has '-' char where the path goes up or down?
 
+// ACB
+// @---A---+|C|+---+|+-B-x
 
 
 
