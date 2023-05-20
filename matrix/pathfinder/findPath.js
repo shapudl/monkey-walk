@@ -1,6 +1,6 @@
 const findStart = require('../utils/findStart');
 const lookAround = require('../utils/lookAround');
-const takeStep = require('../utils/takeStep');
+const getNewPosition = require('../utils/getNewPosition');
 const validators = require('../validators/characterValidators');
 
 
@@ -41,7 +41,7 @@ const findPath = (matrix) => {
     {
 
         // MOVE AND UPDATE PATH
-        currPosition = takeStep(currPosition, direction);
+        currPosition = getNewPosition(currPosition, direction);
         currCharacter = matrix[currPosition.m][currPosition.n];
 
         if (validators.isValidCharacter(currCharacter)) {

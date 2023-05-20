@@ -1,5 +1,5 @@
 
-const takeStep = ({m, n}, direction) => {
+const getNewPosition = ({m, n}, direction) => {
 
     let newPosition;
 
@@ -37,4 +37,4 @@ const takeStep = ({m, n}, direction) => {
 };
 
 
-module.exports = takeStep;
+module.exports = getNewPosition;

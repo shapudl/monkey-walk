@@ -1,4 +1,4 @@
-const takeStep = require("../../matrix/utils/takeStep");
+const takeStep = require("../../matrix/utils/getNewPosition");
 
 describe("Find new position when going",()  =>{
 
