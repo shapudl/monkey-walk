@@ -1,30 +1,23 @@
 /**
  * @param matrix  2-dim jagged array
- * @returns {{path: *, letters: *}}
+ *
+ * @return { m : int, n : int } || false
  */
 const findStart = (matrix) => {
-
-    let start = {
-        m: null, n: null
-    };
-
-    console.log(matrix.length);
 
     for (let m = 0; m < matrix.length; m++) {
         for (let n=0; n < matrix[m].length; n++) {
 
             if (matrix[m][n] === '@') {
-                start = {
+                return  {
                     m: m,
                     n: n
                 }
             }
-
         }
     }
 
-
-    return start;
+    return false;
 };
 
 module.exports = findStart;

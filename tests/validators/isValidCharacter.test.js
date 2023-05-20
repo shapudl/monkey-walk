@@ -1,4 +1,4 @@
-const isValidCharacter = require("./isValidCharacter");
+const { isValidCharacter } = require("../../matrix/validators/characterValidators");
 
 describe("Return true for valid map characters:  ",()  => {
 

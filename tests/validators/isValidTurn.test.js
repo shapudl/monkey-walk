@@ -1,4 +1,4 @@
-const isValidTurn = require("./isValidTurn");
+const { isValidTurn } = require("../../matrix/validators/characterValidators");
 
 describe("Return true for valid turn character: ",()  =>{
 
