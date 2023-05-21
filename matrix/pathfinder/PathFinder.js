@@ -124,8 +124,6 @@ class PathFinder {
             this.determineDirection();
         }
 
-        return this.path;
-
         return {
             letters: this.letters,
             path: this.path
