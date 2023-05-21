@@ -28,36 +28,58 @@ describe("Find path returns path for valid map",()  =>{
 
         const pathFinder = new PathFinder(map1);
 
-        expect(pathFinder.findPath()).toEqual("@---A---+|C|+---+|+-B-x");
+        expect(pathFinder.findPath()).toEqual(
+            {
+                letters: "ACB",
+                path: "@---A---+|C|+---+|+-B-x"
+            });
     });
 
     test("with intersections", ()=>{
 
         const pathFinder = new PathFinder(map2);
-        expect(pathFinder.findPath()).toEqual("@|A+---B--+|+--C-+|-||+---D--+|x");
+        expect(pathFinder.findPath()).toEqual({
+            letters: "ABCD",
+            path: "@|A+---B--+|+--C-+|-||+---D--+|x"
+        });
     });
 
     test("with letters on turns", ()=>{
 
         const pathFinder = new PathFinder(map3);
-        expect(pathFinder.findPath()).toEqual("@---A---+|||C---+|+-B-x");
+        expect(pathFinder.findPath()).toEqual({
+            letters: "ACB",
+            path: "@---A---+|||C---+|+-B-x"
+        });
     });
 
     test("with letters on intersections", ()=>{
 
         const pathFinder = new PathFinder(map4);
-        expect(pathFinder.findPath()).toEqual("@-G-O-+|+-+|O||+-O-N-+|I|+-+|+-I-+|ES|x");
+        expect(pathFinder.findPath()).toEqual(
+            {
+                letters: "GOONIES",
+                path: "@-G-O-+|+-+|O||+-O-N-+|I|+-+|+-I-+|ES|x"
+            });
     });
 
     test("with compact space", ()=>{
 
         const pathFinder = new PathFinder(map5);
-        expect(pathFinder.findPath()).toEqual("@B+++B|+-L-+A+++A-+Hx");
+        expect(pathFinder.findPath()).toEqual(
+            {
+                letters: "BLAH",
+                path: "@B+++B|+-L-+A+++A-+Hx"
+            });
     });
 
     test("with stuff after x", ()=>{
 
         const pathFinder = new PathFinder(map6);
-        expect(pathFinder.findPath()).toEqual("@-A--+|+-B--x");
+        expect(pathFinder.findPath()).toEqual(
+            {
+                letters: "AB",
+                path: "@-A--+|+-B--x"
+            });
     });
 });
