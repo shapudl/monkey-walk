@@ -5,3 +5,4 @@ const map = [
     ['','','','','','B','-','x'],
 ];
 
+module.exports = map;
