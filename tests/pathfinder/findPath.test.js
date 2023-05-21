@@ -1,4 +1,4 @@
-const findPath = require("../../matrix/pathfinder/findPath");
+const PathFinder = require('../../matrix/pathfinder/PathFinder');
 
 const map1 = require("../inputs/valid/map-01");
 const map2 = require("../inputs/valid/map-02");
@@ -10,37 +10,54 @@ const map6 = require("../inputs/valid/map-06");
 
 describe("Find path returns false for invalid map input - ",()  =>{
     test("no input", ()=>{
-        expect(findPath()).toBe(false);
+
+        const pathFinder = new PathFinder();
+        expect(pathFinder.findPath()).toBe(false);
+
     });
 
     test("empty array", ()=>{
-        expect(findPath([])).toBe(false);
+        const pathFinder = new PathFinder([]);
+        expect(pathFinder.findPath([])).toBe(false);
     });
 });
 
 
 describe("Find path returns path for valid map",()  =>{
     test("basic example", ()=>{
-        expect(findPath(map1)).toEqual("@---A---+|C|+---+|+-B-x");
+
+        const pathFinder = new PathFinder(map1);
+
+        expect(pathFinder.findPath()).toEqual("@---A---+|C|+---+|+-B-x");
     });
 
     test("with intersections", ()=>{
-        expect(findPath(map2)).toEqual("@|A+---B--+|+--C-+|-||+---D--+|x");
+
+        const pathFinder = new PathFinder(map2);
+        expect(pathFinder.findPath()).toEqual("@|A+---B--+|+--C-+|-||+---D--+|x");
     });
 
     test("with letters on turns", ()=>{
-        expect(findPath(map3)).toEqual("@---A---+|||C---+|+-B-x");
+
+        const pathFinder = new PathFinder(map3);
+        expect(pathFinder.findPath()).toEqual("@---A---+|||C---+|+-B-x");
     });
 
     test("with letters on intersections", ()=>{
-        expect(findPath(map4)).toEqual("@-G-O-+|+-+|O||+-O-N-+|I|+-+|+-I-+|ES|x");
+
+        const pathFinder = new PathFinder(map4);
+        expect(pathFinder.findPath()).toEqual("@-G-O-+|+-+|O||+-O-N-+|I|+-+|+-I-+|ES|x");
     });
 
     test("with compact space", ()=>{
-        expect(findPath(map5)).toEqual("@B+++B|+-L-+A+++A-+Hx");
+
+        const pathFinder = new PathFinder(map5);
+        expect(pathFinder.findPath()).toEqual("@B+++B|+-L-+A+++A-+Hx");
     });
 
     test("with stuff after x", ()=>{
-        expect(findPath(map6)).toEqual("@-A--+|+-B--x");
+
+        const pathFinder = new PathFinder(map6);
+        expect(pathFinder.findPath()).toEqual("@-A--+|+-B--x");
     });
 });
