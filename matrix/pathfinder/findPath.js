@@ -1,5 +1,5 @@
 const findStart = require('../utils/findStart');
-const lookAround = require('../utils/lookAround');
+const getSurroundingDirections = require('../utils/getSurroundingDirections');
 const getNewPosition = require('../utils/getNewPosition');
 const validators = require('../validators/characterValidators');
 
@@ -25,7 +25,7 @@ const findPath = (matrix) => {
 
 
     // LOOK AROUND
-    let directions = lookAround(matrix, start);
+    let directions = getSurroundingDirections(matrix, start);
 
     // is not valid start - exit
     if (directions.length !== 1) {
@@ -56,7 +56,7 @@ const findPath = (matrix) => {
 
 
         // DETERMINE NEW DIRECTION
-        directions = lookAround(matrix, currPosition);
+        directions = getSurroundingDirections(matrix, currPosition);
 
         // ENTER LOOP
         // if isIntersection

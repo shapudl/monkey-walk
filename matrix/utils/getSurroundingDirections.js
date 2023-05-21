@@ -4,7 +4,7 @@
  * @param n
  * @return Array || {boolean}
  */
-const lookAround = (matrix, { m , n }) => {
+const getSurroundingDirections = (matrix, { m , n }) => {
 
     let directions = [];
 
@@ -31,4 +31,4 @@ const lookAround = (matrix, { m , n }) => {
     return directions;
 };
 
-module.exports = lookAround;
+module.exports = getSurroundingDirections;
