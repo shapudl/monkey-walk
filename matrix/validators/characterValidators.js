@@ -11,7 +11,7 @@ const isValidTurn = (character) => {
 };
 
 const isLetter = (character) =>  {
-    return /^[A-Za-z+|\-@x]$/.test(character);
+    return /^[A-Za-z]$/.test(character);
 };
 
 module.exports = {

@@ -1,16 +1,6 @@
-/**
- * @param matrix  2-dim jagged array
- * @returns {{path: *, letters: *}}
- */
-const findPath = (matrix) => {
+const PathFinder = require('./matrix/pathfinder/PathFinder');
+const matrix = require('./tests/inputs/valid/map-04');
 
-    if (!matrix || matrix.length === 0) return false;
-    let letters, path;
-
-    return {
-        letters: letters,
-        path: path
-    };
-};
-
-module.exports = findPath;
+// Create an instance of PathFinder and use its methods
+const pathFinder = new PathFinder(matrix);
+pathFinder.findPath();
