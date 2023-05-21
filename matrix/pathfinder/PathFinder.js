@@ -11,10 +11,8 @@ class PathFinder {
 
     constructor(matrix) {
         this.matrix = matrix;
-
         this.letters = "";
         this.path = "@";
-
         this.start = this.findStart(matrix);
         this.currPosition = this.start;
         this.currCharacter = "@";
@@ -74,34 +72,35 @@ class PathFinder {
     }
 
     updateIntersection(directions) {
-        if (directions.length === 4) {
-
-            this.insideLoop = !this.insideLoop;
-            this.intersection = true;
-
-        } else {
-            this.intersection = false;
-        }
+        this.intersection = directions.length === 4;
+        /** toggle insideLoop when encountering an intersection */
+        this.insideLoop = this.intersection ? !this.insideLoop : this.insideLoop;
     }
 
     updateDirection() {
-        let directions = getSurroundingDirections(this.matrix, this.currPosition);
+        let surroundingDirections = getSurroundingDirections(this.matrix, this.currPosition);
 
-        this.updateIntersection(directions);
+        this.updateIntersection(surroundingDirections);
 
-        if (
-            (!directions.includes(this.direction) && validators.isValidTurn(this.currCharacter)) ||
-            (this.insideLoop && this.currCharacter === "+")
-        ) {
+        if (this.shouldChangeDirection(surroundingDirections)) {
             this.turn();
         }
     }
 
+    shouldChangeDirection(surroundingDirections){
+        return (
+            (!surroundingDirections.includes(this.direction) && validators.isValidTurn(this.currCharacter)) ||
+            (this.insideLoop && this.currCharacter === "+")
+        )
+    }
+
     turn() {
+        const surroundingDirections = getSurroundingDirections(this.matrix, this.currPosition);
+
         if (["RIGHT", "LEFT"].includes(this.direction)) {
-            this.direction = getSurroundingDirections(this.matrix, this.currPosition).includes("UP") ? "UP" : "DOWN";
+            this.direction = surroundingDirections.includes("UP") ? "UP" : "DOWN";
         } else {
-            this.direction = getSurroundingDirections(this.matrix, this.currPosition).includes("LEFT") ? "LEFT" : "RIGHT";
+            this.direction = surroundingDirections.includes("LEFT") ? "LEFT" : "RIGHT";
         }
     }
 
@@ -115,7 +114,6 @@ class PathFinder {
         while (!this.isEndOfPath()) {
             this.advancePosition();
             this.updateDirection();
-
             this.updatePath();
             this.updateLetters();
         }
