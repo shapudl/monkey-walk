@@ -3,7 +3,6 @@ const getSurroundingDirections = require('../utils/getSurroundingDirections');
 const getNewPosition = require('../utils/getNewPosition');
 const validators = require('../validators/characterValidators');
 
-
 class PathFinder {
 
     findStart(){
@@ -25,13 +24,10 @@ class PathFinder {
     }
 
     canStart(){
-
-        if (!this.start) return false;
-        return true;
+        return this.start;
     }
 
     setInitialDirection(){
-
         let directions = getSurroundingDirections(this.matrix, this.start);
 
         if (directions.length !== 1) return false;
@@ -39,38 +35,28 @@ class PathFinder {
         this.direction = directions[0];
 
         return true;
-
     }
 
     isEndOfPath(){
         return this.currCharacter === "x";
     }
 
-
-    takeStep() {
-        // walking
+    advancePosition() {
         this.updateCurrentPosition();
         this.updateCurrentCharacter();
-
     }
 
     updateCurrentPosition(){
-
         this.currPosition = getNewPosition(this.currPosition, this.direction);
-
     }
 
     updateCurrentCharacter(){
-
         this.currCharacter = this.matrix[this.currPosition.m][this.currPosition.n];
-
     }
 
     updatePath(){
-        // update path
         if (validators.isValidCharacter(this.currCharacter)) {
             this.path += this.currCharacter;
-
         } else {
             return false;
         }
@@ -78,7 +64,6 @@ class PathFinder {
 
     updateLetters(){
         /** Letters on intersections should be recorded only once */
-
         if (validators.isLetter(this.currCharacter)
             && !this.isEndOfPath())
         {
@@ -88,10 +73,7 @@ class PathFinder {
         }
     }
 
-    determineDirection() {
-
-        let directions = getSurroundingDirections(this.matrix, this.currPosition);
-
+    updateIntersection(directions) {
         if (directions.length === 4) {
 
             this.insideLoop = !this.insideLoop;
@@ -100,6 +82,12 @@ class PathFinder {
         } else {
             this.intersection = false;
         }
+    }
+
+    updateDirection() {
+        let directions = getSurroundingDirections(this.matrix, this.currPosition);
+
+        this.updateIntersection(directions);
 
         if (
             (!directions.includes(this.direction) && validators.isValidTurn(this.currCharacter)) ||
@@ -118,22 +106,18 @@ class PathFinder {
     }
 
     findPath() {
-
-        if (this.canStart()) {
-            this.setInitialDirection();
-        } else {
+        if (!this.canStart()) {
             return false;
         }
 
+        this.setInitialDirection();
+
         while (!this.isEndOfPath()) {
+            this.advancePosition();
+            this.updateDirection();
 
-            this.takeStep();
-            this.determineDirection();
-
-            // saving path and letters
             this.updatePath();
             this.updateLetters();
-
         }
 
         return {
@@ -141,7 +125,6 @@ class PathFinder {
             path: this.path
         };
     }
-
 }
 
 module.exports = PathFinder;
