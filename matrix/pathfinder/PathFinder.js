@@ -20,6 +20,7 @@ class PathFinder {
         this.currPosition = this.start;
         this.currCharacter = "@";
         this.direction = null;
+        this.intersection = false;
         this.insideLoop = false;
     }
 
@@ -51,10 +52,6 @@ class PathFinder {
         this.updateCurrentPosition();
         this.updateCurrentCharacter();
 
-        // saving path and letters
-        this.updatePath();
-        this.updateLetters();
-
     }
 
     updateCurrentPosition(){
@@ -80,9 +77,14 @@ class PathFinder {
     }
 
     updateLetters(){
-        /** @todo handle loop */
-        if (validators.isLetter(this.currCharacter) && !this.isEndOfPath()) {
-            this.letters += this.currCharacter;
+        /** Letters on intersections should be recorded only once */
+
+        if (validators.isLetter(this.currCharacter)
+            && !this.isEndOfPath())
+        {
+            if (this.insideLoop || (!this.insideLoop && !this.intersection)) {
+                this.letters += this.currCharacter;
+            }
         }
     }
 
@@ -91,7 +93,12 @@ class PathFinder {
         let directions = getSurroundingDirections(this.matrix, this.currPosition);
 
         if (directions.length === 4) {
+
             this.insideLoop = !this.insideLoop;
+            this.intersection = true;
+
+        } else {
+            this.intersection = false;
         }
 
         if (
@@ -122,6 +129,11 @@ class PathFinder {
 
             this.takeStep();
             this.determineDirection();
+
+            // saving path and letters
+            this.updatePath();
+            this.updateLetters();
+
         }
 
         return {

@@ -6,6 +6,7 @@ const map3 = require("../inputs/valid/map-03");
 const map4 = require("../inputs/valid/map-04");
 const map5 = require("../inputs/valid/map-05");
 const map6 = require("../inputs/valid/map-06");
+const map7 = require("../inputs/valid/map-07");
 
 
 describe("Find path returns false for invalid map input - ",()  =>{
@@ -60,6 +61,16 @@ describe("Find path returns path for valid map",()  =>{
             {
                 letters: "GOONIES",
                 path: "@-G-O-+|+-+|O||+-O-N-+|I|+-+|+-I-+|ES|x"
+            });
+    });
+
+    test("with letters on intersections and inside a loop", ()=>{
+
+        const pathFinder = new PathFinder(map7);
+        expect(pathFinder.findPath()).toEqual(
+            {
+                letters: "GOyONIES",
+                path: "@-G-O-+|+-+yO||+-O-N-+|I|+-+|+-I-+|ES|x"
             });
     });
 
