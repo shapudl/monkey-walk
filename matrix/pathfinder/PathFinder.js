@@ -4,6 +4,9 @@ const preprocessMatrix = require('../utils/preprocessMatrix');
 const getNewPosition = require('../utils/getNewPosition');
 const validators = require('../validators/characterValidators');
 
+const horizontalOrientation = ["RIGHT", "LEFT"];
+const verticalOrientation = ["UP", "DOWN"];
+
 class PathFinder {
     findStart(){
         return findCharacter(this.matrix, "@");
@@ -29,10 +32,6 @@ class PathFinder {
         this.surroundingDirections = null;
         this.intersection = false;
         this.insideLoop = false;
-    }
-
-    canStart(){
-        return this.start;
     }
 
     updateSurroundingDirections(){
@@ -95,36 +94,37 @@ class PathFinder {
         this.insideLoop = this.intersection ? !this.insideLoop : this.insideLoop;
     }
 
-    updateDirection() {
+    checkFork(){
+        const currentOrientation = horizontalOrientation.includes(this.direction) ? horizontalOrientation : verticalOrientation;
+        const oppositeOrientation = currentOrientation === horizontalOrientation ? verticalOrientation : horizontalOrientation;
 
+        /** If both turning directions are available it's a fork in path */
+        if (oppositeOrientation.every(dir => this.surroundingDirections.includes(dir))){
+            throw new Error("Error: Fork in path");
+        }
+    }
+
+    checkFakeTurn(){
+        const currentOrientation = horizontalOrientation.includes(this.direction) ? horizontalOrientation : verticalOrientation;
+        const oppositeOrientation = currentOrientation === horizontalOrientation ? verticalOrientation : horizontalOrientation;
+
+        /** If none of the turning directions are available it's a fake turn */
+        if (!oppositeOrientation.some(dir => this.surroundingDirections.includes(dir))){
+            throw new Error("Error: Fake turn");
+        }
+    }
+
+    updateDirection() {
         this.updateSurroundingDirections();
         this.updateIntersection();
-
 
         if (this.surroundingDirections.length === 1 && !this.isEndOfPath() && !this.isStartOfPath()) {
             throw new Error("Error: Broken path");
         }
 
         if (this.currCharacter === "+") {
-
-            if (["RIGHT", "LEFT"].includes(this.direction)) {
-                if (this.surroundingDirections.includes("UP") &&  this.surroundingDirections.includes("DOWN")) {
-                    throw new Error("Error: Fork in path");
-                }
-
-                if (!this.surroundingDirections.includes("UP") &&  !this.surroundingDirections.includes("DOWN")) {
-                    throw new Error("Error: Fake turn");
-                }
-
-            } else {
-                if (this.surroundingDirections.includes("LEFT") &&  this.surroundingDirections.includes("RIGHT")) {
-                    throw new Error("Error: Fork in path");
-                }
-
-                if (!this.surroundingDirections.includes("LEFT") &&  !this.surroundingDirections.includes("RIGHT")) {
-                    throw new Error("Error: Fake turn");
-                }
-            }
+            this.checkFork();
+            this.checkFakeTurn();
         }
 
         if (this.shouldChangeDirection()) {
@@ -132,24 +132,25 @@ class PathFinder {
         }
     }
 
-
-    shouldChangeDirection(){
+    shouldChangeDirection() {
         return (
             (!this.surroundingDirections.includes(this.direction) && validators.isValidTurn(this.currCharacter)) ||
             (this.insideLoop && this.currCharacter === "+")
-        )
+        );
     }
 
     turn() {
-        if (["RIGHT", "LEFT"].includes(this.direction)) {
+        const isHorizontal = horizontalOrientation.includes(this.direction);
+
+        if (isHorizontal) {
             this.direction = this.surroundingDirections.includes("UP") ? "UP" : "DOWN";
         } else {
             this.direction = this.surroundingDirections.includes("LEFT") ? "LEFT" : "RIGHT";
         }
     }
 
-    findPath() {
-        if (!this.canStart()) {
+    initPath(){
+        if (this.startCharacterCount === 0) {
             throw new Error("Error: Missing start character");
         }
 
@@ -164,7 +165,10 @@ class PathFinder {
         if (this.startCharacterCount > 1) {
             throw new Error("Error: Multiple starts");
         }
+    }
 
+    findPath() {
+        this.initPath();
         this.setInitialDirection();
 
         while (!this.isEndOfPath()) {
