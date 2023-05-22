@@ -2,6 +2,9 @@ const getNewPosition = ({m, n}, direction) => {
     let newPosition;
 
     if (direction === "UP") {
+        if (m <= 0) {
+            throw new Error("Going over the edge");
+        }
         newPosition = {
             m: m-1,
             n: n
@@ -17,6 +20,9 @@ const getNewPosition = ({m, n}, direction) => {
             n: n+1
         }
     } else if ( direction === "LEFT") {
+        if (n <= 0) {
+            throw new Error("Going over the edge");
+        }
         newPosition = {
             m: m,
             n: n-1
