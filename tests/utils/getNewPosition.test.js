@@ -45,4 +45,16 @@ describe("Throws error for", () => {
             getNewPosition({ m: 0, n: 0 }, "INVALID_DIRECTION");
         }).toThrow("Invalid direction: INVALID_DIRECTION");
     });
+
+    test("going UP when in first row", ()=>{
+        expect(() => {
+            getNewPosition({ m: 0, n: 5 }, "UP");
+        }).toThrow("Going over the edge");
+    });
+
+    test("going LEFT when in first column", ()=>{
+        expect(() => {
+            getNewPosition({ m: 2, n: 0 }, "LEFT");
+        }).toThrow("Going over the edge");
+    });
 });
