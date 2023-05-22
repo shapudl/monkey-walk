@@ -17,6 +17,7 @@ const invalidMap6 = require("../inputs/invalid/map-06");
 const invalidMap7 = require("../inputs/invalid/map-07");
 const invalidMap8 = require("../inputs/invalid/map-08");
 const invalidMap9 = require("../inputs/invalid/map-09");
+const invalidMap10 = require("../inputs/invalid/map-10");
 
 describe("Find path returns path for valid map",()  =>{
     test("basic example", ()=>{
@@ -58,8 +59,8 @@ describe("Find path returns path for valid map",()  =>{
         const pathFinder = new PathFinder(map7);
         expect(pathFinder.findPath()).toEqual(
             {
-                letters: "GOyONIES",
-                path: "@-G-O-+|+-+yO||+-O-N-+|I|+-+|+-I-+|ES|x"
+                letters: "GOYONIES",
+                path: "@-G-O-+|+-+YO||+-O-N-+|I|+-+|+-I-+|ES|x"
             });
     });
 
@@ -142,5 +143,12 @@ describe("Find path throws error for",()  =>{
         expect(() => {
             pathFinder.findPath()
         }).toThrow("Error: Fake turn");
+    });
+
+    test("invalid character along the path", ()=>{
+        const pathFinder = new PathFinder(invalidMap10);
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Invalid character");
     });
 });

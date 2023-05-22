@@ -9,11 +9,6 @@ describe("Return true for valid turn character: ",()  =>{
     test("uppercase letter A", ()=>{
         expect(isValidTurn("A")).toBe(true);
     });
-
-    test("lowercase letter g", ()=>{
-        expect(isValidTurn("g")).toBe(true);
-    });
-
 });
 
 describe("Return false for invalid turn character: ",()  => {
@@ -23,6 +18,10 @@ describe("Return false for invalid turn character: ",()  => {
 
     test("space", ()=>{
         expect(isValidTurn(" ")).toBe(false);
+    });
+
+    test("lowercase letter g", ()=>{
+        expect(isValidTurn("g")).toBe(false);
     });
 
     test("|", ()=>{

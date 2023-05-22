@@ -74,13 +74,13 @@ class PathFinder {
         if (validators.isValidCharacter(this.currCharacter)) {
             this.path += this.currCharacter;
         } else {
-            return false;
+            throw new Error("Error: Invalid character");
         }
     }
 
     updateLetters(){
         /** Letters on intersections should be recorded only once */
-        if (validators.isLetter(this.currCharacter)
+        if (validators.isUppercaseLetter(this.currCharacter)
             && !this.isEndOfPath())
         {
             if (this.insideLoop || (!this.insideLoop && !this.intersection)) {
@@ -115,7 +115,6 @@ class PathFinder {
                 if (!this.surroundingDirections.includes("UP") &&  !this.surroundingDirections.includes("DOWN")) {
                     throw new Error("Error: Fake turn");
                 }
-
 
             } else {
                 if (this.surroundingDirections.includes("LEFT") &&  this.surroundingDirections.includes("RIGHT")) {

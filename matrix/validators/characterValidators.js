@@ -1,21 +1,19 @@
 const isValidCharacter = (character) => {
-    const validPattern = /^[A-Za-z+|\-@x]$/;
+    const validPattern = /^[A-Z+|\-@x]$/;
     return validPattern.test(character);
 };
 
 const isValidTurn = (character) => {
-
-    const validPattern = /^[A-Za-z+]$/;
-
+    const validPattern = /^[A-Z+]$/;
     return validPattern.test(character);
 };
 
-const isLetter = (character) =>  {
-    return /^[A-Za-z]$/.test(character);
+const isUppercaseLetter = (character) =>  {
+    return /^[A-Z]$/.test(character);
 };
 
 module.exports = {
     isValidTurn,
     isValidCharacter,
-    isLetter
+    isUppercaseLetter
 };

@@ -26,13 +26,12 @@ describe("Return true for valid map characters:  ",()  => {
         expect(isValidCharacter("A")).toBe(true);
     });
 
-    test("Lowercase letter g", () => {
-        expect(isValidCharacter("g")).toBe(true);
-    });
-
 });
 
 describe("Return false for invalid map characters:",()  =>{
+    test("Lowercase letter g", () => {
+        expect(isValidCharacter("g")).toBe(false);
+    });
 
     test("!", ()=>{
         expect(isValidCharacter("!")).toBe(false);
