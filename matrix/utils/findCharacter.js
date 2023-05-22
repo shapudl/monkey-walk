@@ -5,8 +5,7 @@
  */
 
 const findCharacter = (matrix, character) => {
-
-    if (!matrix || !matrix.length) return false;
+    if (!matrix || !matrix.length) throw new Error("Error: Invalid input");
 
     for (let m = 0; m < matrix.length; m++) {
         for (let n=0; n < matrix[m].length; n++) {

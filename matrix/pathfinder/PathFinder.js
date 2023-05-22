@@ -1,10 +1,10 @@
 const findCharacter = require('../utils/findCharacter');
 const getSurroundingDirections = require('../utils/getSurroundingDirections');
+const preprocessMatrix = require('../utils/preprocessMatrix');
 const getNewPosition = require('../utils/getNewPosition');
 const validators = require('../validators/characterValidators');
 
 class PathFinder {
-
     findStart(){
         return findCharacter(this.matrix, "@");
     }
@@ -13,10 +13,20 @@ class PathFinder {
         this.matrix = matrix;
         this.letters = "";
         this.path = "@";
+
+        const {
+            startCharacterCount,
+            endCharacterCount,
+        } = preprocessMatrix(matrix);
+
+        this.startCharacterCount = startCharacterCount;
+        this.endCharacterCount = endCharacterCount;
+
         this.start = this.findStart(matrix);
         this.currPosition = this.start;
         this.currCharacter = "@";
         this.direction = null;
+        this.surroundingDirections = null;
         this.intersection = false;
         this.insideLoop = false;
     }
@@ -25,18 +35,26 @@ class PathFinder {
         return this.start;
     }
 
+    updateSurroundingDirections(){
+        this.surroundingDirections = getSurroundingDirections(this.matrix, this.currPosition);
+    }
+
     setInitialDirection(){
-        let directions = getSurroundingDirections(this.matrix, this.start);
+        this.updateSurroundingDirections();
 
-        if (directions.length !== 1) return false;
+        if (this.surroundingDirections.length > 1) throw new Error("Error: Multiple starting paths");
 
-        this.direction = directions[0];
+        this.direction = this.surroundingDirections[0];
 
         return true;
     }
 
     isEndOfPath(){
         return this.currCharacter === "x";
+    }
+
+    isStartOfPath(){
+        return this.currCharacter === "@";
     }
 
     advancePosition() {
@@ -71,42 +89,81 @@ class PathFinder {
         }
     }
 
-    updateIntersection(directions) {
-        this.intersection = directions.length === 4;
+    updateIntersection() {
+        this.intersection = this.surroundingDirections.length === 4;
         /** toggle insideLoop when encountering an intersection */
         this.insideLoop = this.intersection ? !this.insideLoop : this.insideLoop;
     }
 
     updateDirection() {
-        let surroundingDirections = getSurroundingDirections(this.matrix, this.currPosition);
 
-        this.updateIntersection(surroundingDirections);
+        this.updateSurroundingDirections();
+        this.updateIntersection();
 
-        if (this.shouldChangeDirection(surroundingDirections)) {
+
+        if (this.surroundingDirections.length === 1 && !this.isEndOfPath() && !this.isStartOfPath()) {
+            throw new Error("Error: Broken path");
+        }
+
+        if (this.currCharacter === "+") {
+
+            if (["RIGHT", "LEFT"].includes(this.direction)) {
+                if (this.surroundingDirections.includes("UP") &&  this.surroundingDirections.includes("DOWN")) {
+                    throw new Error("Error: Fork in path");
+                }
+
+                if (!this.surroundingDirections.includes("UP") &&  !this.surroundingDirections.includes("DOWN")) {
+                    throw new Error("Error: Fake turn");
+                }
+
+
+            } else {
+                if (this.surroundingDirections.includes("LEFT") &&  this.surroundingDirections.includes("RIGHT")) {
+                    throw new Error("Error: Fork in path");
+                }
+
+                if (!this.surroundingDirections.includes("LEFT") &&  !this.surroundingDirections.includes("RIGHT")) {
+                    throw new Error("Error: Fake turn");
+                }
+            }
+        }
+
+        if (this.shouldChangeDirection()) {
             this.turn();
         }
     }
 
-    shouldChangeDirection(surroundingDirections){
+
+    shouldChangeDirection(){
         return (
-            (!surroundingDirections.includes(this.direction) && validators.isValidTurn(this.currCharacter)) ||
+            (!this.surroundingDirections.includes(this.direction) && validators.isValidTurn(this.currCharacter)) ||
             (this.insideLoop && this.currCharacter === "+")
         )
     }
 
     turn() {
-        const surroundingDirections = getSurroundingDirections(this.matrix, this.currPosition);
-
         if (["RIGHT", "LEFT"].includes(this.direction)) {
-            this.direction = surroundingDirections.includes("UP") ? "UP" : "DOWN";
+            this.direction = this.surroundingDirections.includes("UP") ? "UP" : "DOWN";
         } else {
-            this.direction = surroundingDirections.includes("LEFT") ? "LEFT" : "RIGHT";
+            this.direction = this.surroundingDirections.includes("LEFT") ? "LEFT" : "RIGHT";
         }
     }
 
     findPath() {
         if (!this.canStart()) {
-            return false;
+            throw new Error("Error: Missing start character");
+        }
+
+        if (this.endCharacterCount === 0) {
+            throw new Error("Error: Missing end character");
+        }
+
+        if (this.endCharacterCount > 1) {
+            throw new Error("Error: Multiple ends");
+        }
+
+        if (this.startCharacterCount > 1) {
+            throw new Error("Error: Multiple starts");
         }
 
         this.setInitialDirection();
