@@ -4,18 +4,18 @@ const preprocessMatrix = require('../utils/preprocessMatrix');
 const getNewPosition = require('../utils/getNewPosition');
 const validators = require('../validators/characterValidators');
 
-const horizontalOrientation = ["RIGHT", "LEFT"];
-const verticalOrientation = ["UP", "DOWN"];
+const HORIZONTAL_ORIENTATION = ["RIGHT", "LEFT"];
+const VERTICAL_ORIENTATION = ["UP", "DOWN"];
+const START = "@";
+const END = "x";
+const TURN = "+";
 
 class PathFinder {
-    findStart(){
-        return findCharacter(this.matrix, "@");
-    }
 
     constructor(matrix) {
         this.matrix = matrix;
         this.letters = "";
-        this.path = "@";
+        this.path = START;
 
         const {
             startCharacterCount,
@@ -25,9 +25,9 @@ class PathFinder {
         this.startCharacterCount = startCharacterCount;
         this.endCharacterCount = endCharacterCount;
 
-        this.start = this.findStart(matrix);
+        this.start = findCharacter(this.matrix, START);
         this.currPosition = this.start;
-        this.currCharacter = "@";
+        this.currCharacter = START;
         this.direction = null;
         this.surroundingDirections = null;
         this.intersection = false;
@@ -49,11 +49,11 @@ class PathFinder {
     }
 
     isEndOfPath(){
-        return this.currCharacter === "x";
+        return this.currCharacter === END;
     }
 
     isStartOfPath(){
-        return this.currCharacter === "@";
+        return this.currCharacter === START;
     }
 
     advancePosition() {
@@ -95,18 +95,18 @@ class PathFinder {
     }
 
     checkFork(){
-        const currentOrientation = horizontalOrientation.includes(this.direction) ? horizontalOrientation : verticalOrientation;
-        const oppositeOrientation = currentOrientation === horizontalOrientation ? verticalOrientation : horizontalOrientation;
+        const currentOrientation = HORIZONTAL_ORIENTATION.includes(this.direction) ? HORIZONTAL_ORIENTATION : VERTICAL_ORIENTATION;
+        const oppositeOrientation = currentOrientation === HORIZONTAL_ORIENTATION ? VERTICAL_ORIENTATION : HORIZONTAL_ORIENTATION;
 
-        /** If both turning directions are available it's a fork in path */
+        /** If both turning directions are available it's a fork in the path */
         if (oppositeOrientation.every(dir => this.surroundingDirections.includes(dir))){
             throw new Error("Error: Fork in path");
         }
     }
 
     checkFakeTurn(){
-        const currentOrientation = horizontalOrientation.includes(this.direction) ? horizontalOrientation : verticalOrientation;
-        const oppositeOrientation = currentOrientation === horizontalOrientation ? verticalOrientation : horizontalOrientation;
+        const currentOrientation = HORIZONTAL_ORIENTATION.includes(this.direction) ? HORIZONTAL_ORIENTATION : VERTICAL_ORIENTATION;
+        const oppositeOrientation = currentOrientation === HORIZONTAL_ORIENTATION ? VERTICAL_ORIENTATION : HORIZONTAL_ORIENTATION;
 
         /** If none of the turning directions are available it's a fake turn */
         if (!oppositeOrientation.some(dir => this.surroundingDirections.includes(dir))){
@@ -114,7 +114,7 @@ class PathFinder {
         }
     }
 
-    updateDirection() {
+    adjustDirection() {
         this.updateSurroundingDirections();
         this.updateIntersection();
 
@@ -122,7 +122,7 @@ class PathFinder {
             throw new Error("Error: Broken path");
         }
 
-        if (this.currCharacter === "+") {
+        if (this.currCharacter === TURN) {
             this.checkFork();
             this.checkFakeTurn();
         }
@@ -135,12 +135,12 @@ class PathFinder {
     shouldChangeDirection() {
         return (
             (!this.surroundingDirections.includes(this.direction) && validators.isValidTurn(this.currCharacter)) ||
-            (this.insideLoop && this.currCharacter === "+")
+            (this.insideLoop && this.currCharacter === TURN)
         );
     }
 
     turn() {
-        const isHorizontal = horizontalOrientation.includes(this.direction);
+        const isHorizontal = HORIZONTAL_ORIENTATION.includes(this.direction);
 
         if (isHorizontal) {
             this.direction = this.surroundingDirections.includes("UP") ? "UP" : "DOWN";
@@ -173,7 +173,7 @@ class PathFinder {
 
         while (!this.isEndOfPath()) {
             this.advancePosition();
-            this.updateDirection();
+            this.adjustDirection();
             this.updatePath();
             this.updateLetters();
         }
