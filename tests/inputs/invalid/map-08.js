@@ -1,3 +1,3 @@
-const map = [['x','-','B','-','@','-','A','-','x']];
+const map = [['x','-','B','-','@','-','A','-','c']];
 
 module.exports = map;

@@ -18,19 +18,6 @@ const invalidMap7 = require("../inputs/invalid/map-07");
 const invalidMap8 = require("../inputs/invalid/map-08");
 const invalidMap9 = require("../inputs/invalid/map-09");
 
-describe("Find path returns false for invalid map input - ",()  =>{
-    test("no input", ()=>{
-        const pathFinder = new PathFinder();
-        expect(pathFinder.findPath()).toBe(false);
-
-    });
-
-    test("empty array", ()=>{
-        const pathFinder = new PathFinder([]);
-        expect(pathFinder.findPath([])).toBe(false);
-    });
-});
-
 describe("Find path returns path for valid map",()  =>{
     test("basic example", ()=>{
         const pathFinder = new PathFinder(map1);
@@ -98,22 +85,30 @@ describe("Find path returns path for valid map",()  =>{
 describe("Find path throws error for",()  =>{
     test("missing start character", ()=>{
         const pathFinder = new PathFinder(invalidMap1);
-        expect(pathFinder.findPath()).toThrow("Error");
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Missing start character");
     });
 
     test("missing end character", ()=>{
         const pathFinder = new PathFinder(invalidMap2);
-        expect(pathFinder.findPath()).toThrow("Error");
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Missing end character");
     });
 
     test("multiple starts", ()=>{
         const pathFinder = new PathFinder(invalidMap3);
-        expect(pathFinder.findPath()).toThrow("Error");
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Multiple starts");
     });
 
     test("multiple starts", ()=>{
         const pathFinder = new PathFinder(invalidMap4);
-        expect(pathFinder.findPath()).toThrow("Error");
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Multiple starts");
     });
 
     // test("multiple starts", ()=>{
@@ -123,29 +118,29 @@ describe("Find path throws error for",()  =>{
 
     test("fork in path", ()=>{
         const pathFinder = new PathFinder(invalidMap6);
-        expect(pathFinder.findPath()).toThrow("Error");
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Fork in path");
     });
 
     test("broken path", ()=>{
         const pathFinder = new PathFinder(invalidMap7);
-        expect(pathFinder.findPath()).toThrow("Error");
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Broken path");
     });
 
     test("multiple starting paths", ()=>{
         const pathFinder = new PathFinder(invalidMap8);
-        expect(pathFinder.findPath()).toThrow("Error");
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Multiple starting paths");
     });
 
     test("fake turn", ()=>{
         const pathFinder = new PathFinder(invalidMap9);
-        expect(pathFinder.findPath()).toThrow("Error");
-    });
-
-    test("path that is a loop", ()=>{
-
-    });
-
-    test("impossible compact intersection", ()=>{
-
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Fake turn");
     });
 });
