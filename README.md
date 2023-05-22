@@ -15,7 +15,7 @@ You can install it via npm from the root directory:
 npm install 
 ```
 
-##Usage
+## Usage
 To use PathFinder, follow these steps:
 
 ```javascript
@@ -44,7 +44,7 @@ The findPath method returns an object containing the letters encountered (letter
 
 Working example can be found in index.js in the root directory
 
-####Access the results:
+#### Access the results:
 
 ```javascript
 console.log('Letters:', path.letters);
