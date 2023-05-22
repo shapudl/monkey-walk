@@ -12,7 +12,7 @@ const invalidMap1 = require("../inputs/invalid/map-01");
 const invalidMap2 = require("../inputs/invalid/map-02");
 const invalidMap3 = require("../inputs/invalid/map-03");
 const invalidMap4 = require("../inputs/invalid/map-04");
-// const invalidMap5 = require("../inputs/invalid/map-05");
+const invalidMap5 = require("../inputs/invalid/map-05");
 const invalidMap6 = require("../inputs/invalid/map-06");
 const invalidMap7 = require("../inputs/invalid/map-07");
 const invalidMap8 = require("../inputs/invalid/map-08");
@@ -105,17 +105,19 @@ describe("Find path throws error for",()  =>{
         }).toThrow("Error: Multiple starts");
     });
 
-    test("multiple starts", ()=>{
+    test("multiple starts v2", ()=>{
         const pathFinder = new PathFinder(invalidMap4);
         expect(() => {
             pathFinder.findPath()
         }).toThrow("Error: Multiple starts");
     });
 
-    // test("multiple starts", ()=>{
-    //     const pathFinder = new PathFinder(invalidMap5);
-    //     expect(pathFinder.findPath()).toThrow("Error");
-    // });
+    test("multiple ends", ()=>{
+        const pathFinder = new PathFinder(invalidMap5);
+        expect(() => {
+            pathFinder.findPath()
+        }).toThrow("Error: Multiple ends");
+    });
 
     test("fork in path", ()=>{
         const pathFinder = new PathFinder(invalidMap6);

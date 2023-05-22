@@ -1,4 +1,3 @@
-const findCharacter = require('../utils/findCharacter');
 const getSurroundingDirections = require('../utils/getSurroundingDirections');
 const preprocessMatrix = require('../utils/preprocessMatrix');
 const getNewPosition = require('../utils/getNewPosition');
@@ -19,13 +18,13 @@ class PathFinder {
 
         const {
             startCharacterCount,
+            startPosition,
             endCharacterCount,
         } = preprocessMatrix(matrix);
 
         this.startCharacterCount = startCharacterCount;
         this.endCharacterCount = endCharacterCount;
-
-        this.start = findCharacter(this.matrix, START);
+        this.start = startPosition;
         this.currPosition = this.start;
         this.currCharacter = START;
         this.direction = null;
