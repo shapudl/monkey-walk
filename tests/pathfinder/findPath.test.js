@@ -7,6 +7,7 @@ const map4 = require("../inputs/valid/map-04");
 const map5 = require("../inputs/valid/map-05");
 const map6 = require("../inputs/valid/map-06");
 const map7 = require("../inputs/valid/map-07");
+const map8 = require("../inputs/valid/map-08");
 
 const invalidMap1 = require("../inputs/invalid/map-01");
 const invalidMap2 = require("../inputs/invalid/map-02");
@@ -79,6 +80,15 @@ describe("Find path returns path for valid map",()  =>{
             {
                 letters: "AB",
                 path: "@-A--+|+-B--x"
+            });
+    });
+
+    test("Loop inside a loop", ()=>{
+        const pathFinder = new PathFinder(map8);
+        expect(pathFinder.findPath()).toEqual(
+            {
+                letters: "XYZBCD",
+                path: "@||||X+Y+Z+-|-+|||+BC---+|||D|+---|---+|x"
             });
     });
 });
